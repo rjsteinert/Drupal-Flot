@@ -187,10 +187,10 @@ class flot_views_plugin_style extends views_plugin_style {
       $datapoint = $view->field[$flot_field]->flot_render($row);
       $value = $datapoint['value'];
       $label = isset($datapoint['label']) ? $datapoint['label'] : $datapoint['value'];
-
+      
       $layer['series'][] = array($value[0], $value[1]);
       $layer['ticks'][$value[0]] = array($value[0], $label[0]);
-
+      
       if (!isset($layer['range']['min']) || (!empty($value[1]) && $value[1] < $layer['range']['min'])) {
         $layer['range']['min'] = $value[1];
       }
@@ -375,6 +375,9 @@ class flot_views_plugin_style extends views_plugin_style {
     }
 
     $vars['options'] = $style;
+    $vars['options']->xaxis->mode = 'time';
+    unset($vars['options']->xaxis->ticks);
+
   }
 
   /**

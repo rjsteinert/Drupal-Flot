@@ -177,12 +177,14 @@ class flot_handler_field_datapoint extends views_handler_field  {
       'value' => array($series, $value),
       'label' => array($series_label, $value),
     );
+  
   }
 
   /**
    * Optional method that allows the data source to determine axis bounds.
    */
   function pre_render($result) {
+   /* TODO This is commented out until we have an option to use the count and average mode this code is intended for 
     if ($this->use_date) {
       // First grab endpoints from any date filters
       $filters = $this->view->display_handler->get_handlers('filter');
@@ -249,7 +251,7 @@ class flot_handler_field_datapoint extends views_handler_field  {
         $processed[$start_formatted] = $blank;
         $start = strtotime($units[$grouping], $start);
       }
-
+      
       foreach ($result as $row) {
         $timestamp_formatted = $this->format_date($row->{$this->series_field}, $grouping);
         if (isset($processed[$timestamp_formatted])) {
@@ -261,6 +263,7 @@ class flot_handler_field_datapoint extends views_handler_field  {
           }
         }
       }
+    
       // Average out the values.
       if ($this->options['value']['format'] == "raw") {
         foreach ($processed as &$item) {
@@ -270,8 +273,17 @@ class flot_handler_field_datapoint extends views_handler_field  {
           }
         }
       }
+      
+      
       $this->view->result = array_values($processed);
-    }
+      */
+      $i = 0;
+      foreach($result as $row) {
+        $result[$i]->node_created = $row->node_created * 1000;
+        $i++;
+      }
+      $this->view->result = $result;
+    //}
   }
 
   /**
