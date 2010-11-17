@@ -278,19 +278,13 @@ class flot_handler_field_datapoint extends views_handler_field  {
       $this->view->result = array_values($processed);
       */
       foreach($result as &$row) {
-        //dpm($row);
-        //dpm('start with: ' . $row->node_created);
         // Get the date and time in the user's timezone as a 'stupid string' so it can be converted to a unix timestamp in UTC for Flot
         $date = date_make_date($row->node_created, NULL, DATE_UNIX);
-        // dpm('$date: ');
-        // dpm($date);
-        // Convert the string back to a now offset UTC Unix timestamp
-        $adjusted_date = date_make_date($date->date, "UTC");
-        // dpm('adjusted_date: ');
-        // dpm($adjusted_date);
+        // Convert the string back to a now offset UTC Unix timestamp.
+        // date_make_date() does not return an object with usable methods so using date_create...
+        $adjusted_date = date_create($date->date, timezone_open("UTC"));
         // Convert the new UTC time back to a Unix timestamp for Flot
         $row->node_created = $adjusted_date->format('U');
-        // dpm('output: ' . $row->node_created);
         // Convert the Unix timestamp to milliseconds so Javascript can understand it
         $row->node_created = $row->node_created * 1000;
       }
